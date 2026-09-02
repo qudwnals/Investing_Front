@@ -1,4 +1,4 @@
-import { getPortfolioSnapshot, getPortfolioSummary, syncTossData } from './api';
+import { getPortfolioSnapshot, getPortfolioSummary, simulateInvestment, syncTossData } from './api';
 
 describe('dashboard api', () => {
   it('loads account, holdings, and KRW buying power from the backend', async () => {
@@ -41,6 +41,28 @@ describe('portfolio summary api', () => {
     });
     expect(fetchMock).toHaveBeenNthCalledWith(3, 'http://localhost:8080/api/v1/portfolio/summary', { credentials: 'include' });
 
+    fetchMock.mockRestore();
+  });
+});
+
+describe('investment simulation api', () => {
+  it('gets csrf before requesting a simulation preview', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { token: 'csrf-token' } }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: {
+        symbol: 'AAPL', currency: 'USD', amount: '500', currentPrice: '155',
+        estimatedQuantity: '3.2258064516', violations: [], withinRules: true,
+      } }), { status: 200 }));
+
+    const result = await simulateInvestment({ symbol: 'AAPL', currency: 'USD', amount: '500' });
+
+    expect(result.estimatedQuantity).toBe('3.2258064516');
+    expect(fetchMock).toHaveBeenNthCalledWith(1, 'http://localhost:8080/api/v1/auth/csrf', { credentials: 'include' });
+    expect(fetchMock).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/v1/portfolio/simulations', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': 'csrf-token' },
+      body: JSON.stringify({ symbol: 'AAPL', currency: 'USD', amount: '500' }),
+    });
     fetchMock.mockRestore();
   });
 });

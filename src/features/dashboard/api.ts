@@ -73,6 +73,24 @@ export type PortfolioSummary = {
   asOf: string;
 };
 
+export type InvestmentSimulationRequest = {
+  symbol: string;
+  currency: 'KRW' | 'USD';
+  amount: string;
+};
+
+export type InvestmentSimulationResponse = InvestmentSimulationRequest & {
+  currentPrice: string;
+  estimatedQuantity: string;
+  beforeCash: string;
+  afterCash: string;
+  beforeAssetRatio: string;
+  afterAssetRatio: string;
+  violations: string[];
+  withinRules: boolean;
+  simulatedAt: string;
+};
+
 export async function getPortfolioSnapshot(): Promise<PortfolioSnapshot> {
   const [accounts, holdings, buyingPower] = await Promise.all([
     get<TossAccount[]>('/api/v1/toss/accounts'),
@@ -98,6 +116,21 @@ export async function syncTossData(): Promise<void> {
 
 export async function getPortfolioSummary(): Promise<PortfolioSummary> {
   return request<PortfolioSummary>('/api/v1/portfolio/summary', { credentials: 'include' });
+}
+
+export async function simulateInvestment(
+  input: InvestmentSimulationRequest,
+): Promise<InvestmentSimulationResponse> {
+  const csrfResponse = await fetch(`${API_BASE_URL}/api/v1/auth/csrf`, { credentials: 'include' });
+  if (!csrfResponse.ok) throw new Error(`CSRF_FAILED_${csrfResponse.status}`);
+  const csrfBody = await csrfResponse.json() as { data: { token: string } };
+
+  return request<InvestmentSimulationResponse>('/api/v1/portfolio/simulations', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfBody.data.token },
+    body: JSON.stringify(input),
+  });
 }
 
 async function get<T>(path: string): Promise<T> {

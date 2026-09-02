@@ -6,6 +6,7 @@ import {
   type PortfolioSnapshot,
   type PortfolioSummary,
 } from './api';
+import { InvestmentSimulationPanel } from './InvestmentSimulationPanel';
 
 const navigation = ['대시보드', '보유 자산', '시장 보기', '투자 규칙', '투자 일지'];
 const THEME_KEY = 'investment-manager-theme';
@@ -123,6 +124,8 @@ export function DashboardPage({ onOpenRules }: { onOpenRules?: () => void }) {
             <CurrencyCard title="달러 자산" summary={summary?.usd} suffix="달러" />
           </div>
         </section>
+
+        <InvestmentSimulationPanel />
 
         <section className="lower-grid">
           <article className="panel empty-panel">
