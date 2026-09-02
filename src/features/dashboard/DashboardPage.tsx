@@ -7,6 +7,7 @@ import {
   type PortfolioSummary,
 } from './api';
 import { InvestmentSimulationPanel } from './InvestmentSimulationPanel';
+import { OrderExecutionPanel } from './OrderExecutionPanel';
 
 const navigation = ['대시보드', '보유 자산', '시장 보기', '투자 규칙', '투자 일지'];
 const THEME_KEY = 'investment-manager-theme';
@@ -126,6 +127,8 @@ export function DashboardPage({ onOpenRules, onOpenJournal }: { onOpenRules?: ()
         </section>
 
         <InvestmentSimulationPanel />
+
+        <OrderExecutionPanel />
 
         <section className="lower-grid">
           <article className="panel empty-panel">

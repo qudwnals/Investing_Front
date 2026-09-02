@@ -164,6 +164,17 @@ select { padding: 13px 14px; color: var(--text); border: 1px solid #d2d2d7; bord
 .simulation-metrics span { color: var(--text-muted); font-size: 11px; }
 .simulation-metrics b { display: block; margin-top: 5px; color: var(--text); font-size: 14px; }
 .violation-list { display: grid; gap: 5px; padding-left: 18px; margin: 16px 0 0; color: #9a6700; font-size: 12px; line-height: 1.5; }
+.order-panel { margin-top: 16px; }
+.order-panel .panel-heading { margin-bottom: 16px; }
+.order-warning { margin: 0; padding: 12px; color: #9a6700; border-radius: 10px; background: rgb(255 159 10 / 10%); font-size: 12px; line-height: 1.6; }
+.order-form { display: grid; grid-template-columns: 1.2fr .8fr .8fr .8fr; align-items: end; gap: 12px; margin-top: 20px; }
+.order-form label { display: grid; gap: 7px; }
+.order-form input, .order-form select { width: 100%; }
+.order-form button { grid-column: 1 / -1; margin-top: 0; padding: 13px 16px; color: #fff; border-radius: 12px; background: var(--control); font-weight: 650; }
+.order-form button:hover { background: var(--control-hover); }
+.order-form button:disabled { cursor: wait; opacity: .6; }
+.order-confirm { display: flex !important; grid-column: 1 / -1; grid-template-columns: auto 1fr !important; align-items: center; gap: 8px !important; color: var(--text-secondary); }
+.order-confirm input { width: auto; accent-color: var(--blue); }
 .holding-list { display: grid; gap: 4px; padding: 0; margin: 0; list-style: none; }
 .holding-list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
 .holding-list li:last-child { border-bottom: 0; }
@@ -196,4 +207,6 @@ select { padding: 13px 14px; color: var(--text); border: 1px solid #d2d2d7; bord
   .journal-memo-field, .journal-form button, .journal-form .form-error, .journal-form .form-success { grid-column: auto; }
   .simulation-form, .simulation-metrics { grid-template-columns: 1fr; }
   .simulation-form button { width: 100%; }
+  .order-form { grid-template-columns: 1fr; }
+  .order-form button, .order-confirm { grid-column: auto; }
 }

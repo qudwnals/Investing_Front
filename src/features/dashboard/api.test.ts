@@ -1,4 +1,4 @@
-import { getPortfolioSnapshot, getPortfolioSummary, simulateInvestment, syncTossData } from './api';
+import { executeOrder, getPortfolioSnapshot, getPortfolioSummary, simulateInvestment, syncTossData } from './api';
 
 describe('dashboard api', () => {
   it('loads account, holdings, and KRW buying power from the backend', async () => {
@@ -62,6 +62,24 @@ describe('investment simulation api', () => {
       method: 'POST', credentials: 'include',
       headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': 'csrf-token' },
       body: JSON.stringify({ symbol: 'AAPL', currency: 'USD', amount: '500' }),
+    });
+    fetchMock.mockRestore();
+  });
+});
+
+describe('order execution api', () => {
+  it('gets csrf before sending an explicitly confirmed order', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { token: 'csrf-token' } }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { orderId: 'order-1', clientOrderId: 'client-1' } }), { status: 200 }));
+    const input = { symbol: 'AAPL', currency: 'USD' as const, orderType: 'MARKET' as const, price: '', quantity: '1', confirmed: true };
+
+    await executeOrder(input);
+
+    expect(fetchMock).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/v1/orders/execute', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': 'csrf-token' },
+      body: JSON.stringify(input),
     });
     fetchMock.mockRestore();
   });
