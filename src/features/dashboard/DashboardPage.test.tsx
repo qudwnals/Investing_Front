@@ -33,4 +33,13 @@ describe('DashboardPage', () => {
     expect(localStorage.getItem('investment-manager-theme')).toBe('dark');
     expect(screen.getByRole('button', { name: '라이트 모드로 전환' })).toBeInTheDocument();
   });
+
+  it('opens the investment rules view from the sidebar', async () => {
+    const onOpenRules = vi.fn();
+    render(<DashboardPage onOpenRules={onOpenRules} />);
+
+    await userEvent.click(screen.getByRole('button', { name: '투자 규칙' }));
+
+    expect(onOpenRules).toHaveBeenCalledOnce();
+  });
 });
