@@ -84,10 +84,14 @@ export async function getPortfolioSnapshot(): Promise<PortfolioSnapshot> {
 }
 
 export async function syncTossData(): Promise<void> {
+  const csrfResponse = await fetch(`${API_BASE_URL}/api/v1/auth/csrf`, { credentials: 'include' });
+  if (!csrfResponse.ok) throw new Error(`CSRF_FAILED_${csrfResponse.status}`);
+  const csrfBody = await csrfResponse.json() as { data: { token: string } };
+
   await request('/api/v1/toss/sync', {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfBody.data.token },
     body: '{}',
   });
 }

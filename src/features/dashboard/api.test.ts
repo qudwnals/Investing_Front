@@ -22,6 +22,7 @@ describe('dashboard api', () => {
 describe('portfolio summary api', () => {
   it('syncs Toss data and reads the currency-aware portfolio summary', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { token: 'csrf-token' } }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ data: { syncedAt: '2026-09-02T10:00:00Z' } }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ data: {
         krw: { currency: 'KRW', marketValue: '140000', cash: '1000000', totalValue: '1140000', profitLoss: '10000', profitLossRate: '0.0769' },
@@ -34,10 +35,11 @@ describe('portfolio summary api', () => {
 
     expect(summary.totalKrw).toBe('3950007.75');
     expect(summary.krw.cash).toBe('1000000');
-    expect(fetchMock).toHaveBeenNthCalledWith(1, 'http://localhost:8080/api/v1/toss/sync', {
-      method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}',
+    expect(fetchMock).toHaveBeenNthCalledWith(1, 'http://localhost:8080/api/v1/auth/csrf', { credentials: 'include' });
+    expect(fetchMock).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/v1/toss/sync', {
+      method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': 'csrf-token' }, body: '{}',
     });
-    expect(fetchMock).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/v1/portfolio/summary', { credentials: 'include' });
+    expect(fetchMock).toHaveBeenNthCalledWith(3, 'http://localhost:8080/api/v1/portfolio/summary', { credentials: 'include' });
 
     fetchMock.mockRestore();
   });
