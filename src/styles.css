@@ -123,6 +123,27 @@ form button:disabled { cursor: wait; opacity: .65; }
 .rules-card form button { width: 100%; }
 .form-success { margin: 6px 0 0; color: #248a3d; font-size: 13px; line-height: 1.5; }
 .rules-retry { margin: 16px 0 0; color: var(--text-muted); font-size: 12px; }
+.journal-shell { min-height: 100vh; background: var(--page); }
+.journal-content { width: min(100%, 1240px); margin: 0 auto; padding: 60px clamp(24px, 5vw, 80px); }
+.journal-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+.journal-header h1 { margin-bottom: 8px; }
+.journal-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 16px; }
+.journal-card .panel-heading { margin-bottom: 24px; }
+.journal-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 0; }
+.journal-form label { display: grid; gap: 7px; }
+.journal-form input, .journal-form select, .journal-form textarea { width: 100%; }
+textarea { min-height: 130px; padding: 13px 14px; color: var(--text); border: 1px solid #d2d2d7; border-radius: 12px; background: var(--surface-strong); font: inherit; outline: none; resize: vertical; }
+textarea:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgb(0 113 227 / 12%); }
+.journal-memo-field, .journal-form button, .journal-form .form-error, .journal-form .form-success { grid-column: 1 / -1; }
+.journal-form button { margin-top: 0; }
+.journal-list { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; }
+.journal-list-item { padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
+.journal-list-item:first-child { padding-top: 0; }
+.journal-list-item:last-child { border-bottom: 0; }
+.journal-list-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.journal-list-meta strong { color: var(--text); font-size: 13px; }
+.journal-list-meta span, .journal-list-item small { color: var(--text-muted); font-size: 11px; }
+.journal-list-item p { margin: 9px 0 5px; color: var(--text-secondary); font-size: 13px; line-height: 1.6; }
 .simulation-panel { margin-top: 16px; }
 .simulation-panel .panel-heading { margin-bottom: 16px; }
 .simulation-help { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
@@ -170,6 +191,9 @@ select { padding: 13px 14px; color: var(--text); border: 1px solid #d2d2d7; bord
   .rules-header { align-items: start; flex-direction: column; }
   .rules-form-grid { grid-template-columns: 1fr; }
   .back-button { align-self: flex-start; }
+  .journal-header { align-items: start; flex-direction: column; }
+  .journal-layout, .journal-form { grid-template-columns: 1fr; }
+  .journal-memo-field, .journal-form button, .journal-form .form-error, .journal-form .form-success { grid-column: auto; }
   .simulation-form, .simulation-metrics { grid-template-columns: 1fr; }
   .simulation-form button { width: 100%; }
 }

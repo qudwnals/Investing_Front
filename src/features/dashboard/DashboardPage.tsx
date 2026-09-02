@@ -11,7 +11,7 @@ import { InvestmentSimulationPanel } from './InvestmentSimulationPanel';
 const navigation = ['대시보드', '보유 자산', '시장 보기', '투자 규칙', '투자 일지'];
 const THEME_KEY = 'investment-manager-theme';
 
-export function DashboardPage({ onOpenRules }: { onOpenRules?: () => void }) {
+export function DashboardPage({ onOpenRules, onOpenJournal }: { onOpenRules?: () => void; onOpenJournal?: () => void }) {
   const [snapshot, setSnapshot] = useState<PortfolioSnapshot | null>(null);
   const [summary, setSummary] = useState<PortfolioSummary | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -61,7 +61,7 @@ export function DashboardPage({ onOpenRules }: { onOpenRules?: () => void }) {
               className={index === 0 ? 'nav-item active' : 'nav-item'}
               key={item}
               type="button"
-              onClick={item === '투자 규칙' ? onOpenRules : undefined}
+              onClick={item === '투자 규칙' ? onOpenRules : item === '투자 일지' ? onOpenJournal : undefined}
             >
               <span className="nav-dot" aria-hidden="true" />
               {item}
