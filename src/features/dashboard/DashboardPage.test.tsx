@@ -22,4 +22,15 @@ describe('DashboardPage', () => {
     expect(screen.getAllByText('—').length).toBeGreaterThan(0);
     vi.restoreAllMocks();
   });
+
+  it('switches between light and dark themes and remembers the choice', async () => {
+    localStorage.clear();
+    render(<DashboardPage />);
+
+    await userEvent.click(screen.getByRole('button', { name: '다크 모드로 전환' }));
+
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(localStorage.getItem('investment-manager-theme')).toBe('dark');
+    expect(screen.getByRole('button', { name: '라이트 모드로 전환' })).toBeInTheDocument();
+  });
 });
